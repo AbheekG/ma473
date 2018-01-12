@@ -1,21 +1,24 @@
 function q1
 	close all; clear;
 	h = 0.025;
-	k = 0.3 * h^2;
+	k = h^2/2.1;
 	m = 1/h;
 	n = 3;
 
+	X = (0:n)*k;
+	Y = (0:m)*h;
+
 	U = FTCS(h, k, m, n, @fun, @f, @g1, @g2);
-	figure; plot(U(end, :));
-	% saveas(gcf, 'plots/q1_1.png');
-	figure; surf(U);
-	% saveas(gcf, 'plots/q1_2.png');
+	figure; plot(Y, U(end, :)); xlabel('x'); ylabel('u(x, T)'); title('FTCS');
+	saveas(gcf, 'plots/q1_1.png');
+	figure; surf(X, Y, U'); xlabel('t'); ylabel('x'); zlabel('u(t,x)'); title('FTCS');
+	saveas(gcf, 'plots/q1_2.png');
 	
 	U = BTCS(h, k, m, n, @fun, @f, @g1, @g2);
-	figure; plot(U(end, :));
-	% saveas(gcf, 'plots/q1_3.png');
-	figure; surf(U);
-	% saveas(gcf, 'plots/q1_4.png');
+	figure; plot(Y, U(end, :)); xlabel('x'); ylabel('u(x, T)'); title('BTCS');
+	saveas(gcf, 'plots/q1_3.png');
+	figure; surf(X, Y, U'); xlabel('t'); ylabel('x'); zlabel('u(t,x)'); title('BTCS');
+	saveas(gcf, 'plots/q1_4.png');
 end
 
 function [y] = fun(x, t)
@@ -51,7 +54,7 @@ function [U] = FTCS(h, k, m, n, fun, f, g1, g2)
 		end
 	end
 
-	U
+	U;
 end
 
 function [U] = BTCS(h, k, m, n, fun, f, g1, g2)
@@ -83,5 +86,5 @@ function [U] = BTCS(h, k, m, n, fun, f, g1, g2)
 		U(i,:) = (A\b)';
 	end
 
-	U
+	U;
 end

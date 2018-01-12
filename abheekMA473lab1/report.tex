@@ -1,0 +1,104 @@
+\documentclass{article}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{listings}
+\usepackage{mybigpackage}
+\usepackage{graphicx}
+
+\graphicspath{{plots/}}
+
+\begin{document}
+	\title{\textbf{MA473: Computational Finance}}
+	\author{Lab 01 Report \\ 
+		Abheek Ghosh - 140123047 }
+	
+	\maketitle
+	
+When there are $N$ time points $t$ and $M$ space points $x$, the time complexity of FTCS is $O(NM)$. Assuming that the $backslash$ solver of Matlab takes $O(M^3)$ time for a matrix of size $MxM$, the BTCS method takes $O(NM^3)$. Same $O(NM^3)$ time for Crank-Nicolson.
+
+\section{Question 1}
+
+\includegraphics{"q1_1"}
+\pagebreak
+
+\includegraphics{"q1_2"}
+\pagebreak
+
+\includegraphics{"q1_3"}
+\pagebreak
+
+\includegraphics{"q1_4"}
+\pagebreak
+
+
+\section{Question 2}
+
+\[(a) f (x) = sin(\pi x)\]
+\includegraphics{"q2_1"}
+\pagebreak
+
+\includegraphics{"q2_2"}
+\pagebreak
+
+\includegraphics{"q2_3"}
+\pagebreak
+
+\includegraphics{"q2_4"}
+\pagebreak
+
+\includegraphics{"q2_5"}
+\pagebreak
+
+\includegraphics{"q2_6"}
+\pagebreak
+
+\[(b) f (x) = x (1 - x)\]
+\includegraphics{"q2_7"}
+\pagebreak
+
+\includegraphics{"q2_8"}
+\pagebreak
+
+\includegraphics{"q2_9"}
+\pagebreak
+
+\includegraphics{"q2_10"}
+\pagebreak
+
+\includegraphics{"q2_11"}
+\pagebreak
+
+\includegraphics{"q2_12"}
+\pagebreak
+
+\section{Question 3}
+
+U at $t = 0.1$. \[U = [0.7825, 0.7729, 0.7443, 0.6974, 0.6333, 0.5535, 0.4601, 0.3554, 0.2419, 0.1225, 0]\]
+
+\includegraphics{"q3_1"}
+\pagebreak
+
+\includegraphics{"q3_2"}
+\pagebreak
+
+\includegraphics{"q3_3"}
+\pagebreak
+
+\includegraphics{"q3_4"}
+\pagebreak
+
+\includegraphics{"q3_5"}
+\pagebreak
+
+\includegraphics{"q3_6"}
+\pagebreak
+
+\section{Question 4}
+
+\includegraphics{"q4_1"}
+\pagebreak
+
+\includegraphics{"q4_2"}
+\pagebreak
+
+\end{document}

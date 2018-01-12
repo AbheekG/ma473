@@ -6,15 +6,15 @@ function q1
 	n = 500;
 
 	U = FTCS(h, k, m, n, @fun, @f, @g1, @g2);
-	figure; plot(U(end, :));
+	figure; plot(Y, U(end, :)); xlabel('x'); ylabel('u(x, T)');
 	% saveas(gcf, 'plots/q1_1.png');
-	figure; surf(U);
+	figure; surf(X, Y, U'); xlabel('t'); ylabel('x'); zlabel('u(t,x)');
 	% saveas(gcf, 'plots/q1_2.png');
 	
 	U = BTCS(h, k, m, n, @fun, @f, @g1, @g2);
-	figure; plot(U(end, :));
+	figure; plot(Y, U(end, :)); xlabel('x'); ylabel('u(x, T)');
 	% saveas(gcf, 'plots/q1_3.png');
-	figure; surf(U);
+	figure; surf(X, Y, U'); xlabel('t'); ylabel('x'); zlabel('u(t,x)');
 	% saveas(gcf, 'plots/q1_4.png');
 
 	A = zeros(n+1, m+1);

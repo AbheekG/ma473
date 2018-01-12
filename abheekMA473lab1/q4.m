@@ -1,18 +1,18 @@
-function q1
+function q4
 	close all; clear;
 	h = 0.25;
 	k = 0.05;
-	m = 0.5/h;
+	m = 1/h;
 	n = 50;
 
 	X = (0:n)*k;
 	Y = (0:m)*h;
 	U = Crank(h, k, m, n, @fun, @f, @g1, @g2);
 	% size(X), size(Y), size(U)
-	figure; plot(U(end, :));
-	% saveas(gcf, 'plots/q1_1.png');
-	figure; surf(X, Y, U');
-	% saveas(gcf, 'plots/q1_2.png');
+	figure; plot(Y, U(end, :)); xlabel('x'); ylabel('u(x, T)'); title('Crank-Nicolson');
+	saveas(gcf, 'plots/q4_1.png');
+	figure; surf(X, Y, U'); surf(X, Y, U'); xlabel('t'); ylabel('x'); zlabel('u(t,x)'); title('Crank-Nicolson');
+	saveas(gcf, 'plots/q4_2.png');
 end
 
 function [y] = fun(x, t)
@@ -60,5 +60,5 @@ function [U] = Crank(h, k, m, n, fun, f, g1, g2)
 		U(i,:) = (A\b)';
 	end
 
-	U
+	U;
 end

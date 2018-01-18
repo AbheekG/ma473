@@ -1,5 +1,5 @@
 function q1_direct
-	close all; clear;
+	close all; clear; im_num = 1;
 	% Option Parameters
 	T = 1;
 	K = 10;
@@ -12,7 +12,7 @@ function q1_direct
 
 	% Computational Parameters
 	x_max = 1;
-	x_min = -5;
+	x_min = -5 ;
 
 	h = 0.5;
 	k = h^2/2;
@@ -22,19 +22,30 @@ function q1_direct
 	X = x_min:h:x_max;
 	Tau = 0:k:T;
 
-	method = 'Direct';
-	U = FTCS(@fun, @f, @g1, @g2, T, K, r, sig, delta, q, qd, x_min, x_max, h, k, m, n, X, Tau);
-	length(X), length(U(end, :))
-	figure; plot(X, U(end, :)); xlabel('x'); ylabel('u(x, T)'); title('FTCS');
-	saveas(gcf, 'plots/q1_1.png');
-	figure; surf(X, Tau, U); xlabel('x'); ylabel('t'); zlabel('u(x,t)'); title('FTCS');
-	saveas(gcf, 'plots/q1_2.png');
 	
-	U = BTCS(@fun, @f, @g1, @g2, T, K, r, sig, delta, q, qd, x_min, x_max, h, k, m, n, X, Tau, method);
-	figure; plot(X, U(end, :)); xlabel('x'); ylabel('u(x, T)'); title('BTCS');
-	saveas(gcf, 'plots/q1_3.png');
-	figure; surf(X, Tau, U); xlabel('x'); ylabel('t'); zlabel('u(x,t)'); title('BTCS');
-	saveas(gcf, 'plots/q1_4.png');
+	U = FTCS(@fun, @f, @g1, @g2, T, K, r, sig, delta, q, qd, x_min, x_max, h, k, m, n, X, Tau);
+	% length(X), length(U(end, :))
+	figure; plot(X, U(end, :)); xlabel('x'); ylabel('u(x, T)'); title('FTCS');
+	saveas(gcf, sprintf('plots/q1_%d.png', im_num)); im_num = im_num + 1;
+	figure; surf(X, Tau, U); xlabel('x'); ylabel('t'); zlabel('u(x,t)'); title('FTCS');
+	saveas(gcf, sprintf('plots/q1_%d.png', im_num)); im_num = im_num + 1;
+	
+	Methods = ['Direct'; 'GaussS'; 'Jacobi'];%, 'SOR___'];
+	for meth = 1:3
+		U = BTCS(@fun, @f, @g1, @g2, T, K, r, sig, delta, q, qd, x_min, x_max, h, k, m, n, X, Tau, Methods(meth, :));
+		figure; plot(X, U(end, :)); xlabel('x'); ylabel('u(x, T)'); title(sprintf('BTCS using %s method', Methods(meth, :)));
+		saveas(gcf, sprintf('plots/q1_%d.png', im_num)); im_num = im_num + 1;
+		figure; surf(X, Tau, U); xlabel('x'); ylabel('t'); zlabel('u(x,t)'); title(sprintf('BTCS using %s method', Methods(meth, :)));
+		saveas(gcf, sprintf('plots/q1_%d.png', im_num)); im_num = im_num + 1;
+	end
+
+	for meth = 1:3
+		U = Crank(@fun, @f, @g1, @g2, T, K, r, sig, delta, q, qd, x_min, x_max, h, k, m, n, X, Tau, Methods(meth, :));
+		figure; plot(X, U(end, :)); xlabel('x'); ylabel('u(x, T)'); title(sprintf('Crank-Nicolson using %s method', Methods(meth, :)));
+		saveas(gcf, sprintf('plots/q1_%d.png', im_num)); im_num = im_num + 1;
+		figure; surf(X, Tau, U); xlabel('x'); ylabel('t'); zlabel('u(x,t)'); title(sprintf('Crank-Nicolson using %s method', Methods(meth, :)));
+		saveas(gcf, sprintf('plots/q1_%d.png', im_num)); im_num = im_num + 1;
+	end
 end
 
 function [y] = fun(x, t)
@@ -43,7 +54,7 @@ end
 
 function [y] = f(x, qd)
 	temp1 = zeros(size(x));
-	temp2 = exp(x*(qd + 1)/2 ) - exp(x*(qd - 1)/2)
+	temp2 = exp(x*(qd + 1)/2 ) - exp(x*(qd - 1)/2);
 	y = max([temp1; temp2]);
 end
 
@@ -75,6 +86,7 @@ end
 
 function [U] = BTCS(fun, f, g1, g2, T, K, r, sig, delta, q, qd, x_min, x_max, h, k, m, n, X, Tau, method)
 	fprintf('\nRunning BTCS\n');
+	fprintf('Using %s method\n', method);
 	lamda = k / h^2;
 	U = zeros(n+1, m+1);
 
@@ -99,10 +111,9 @@ function [U] = BTCS(fun, f, g1, g2, T, K, r, sig, delta, q, qd, x_min, x_max, h,
 		b(1) = U(i,1);
 		b(end) = U(i,end);
 
-		fprintf('Using %s method\n', method);
 		if method == 'Direct'
 			U(i,:) = (A\b)';
-		elseif method == 'Gauss-Seidel'
+		elseif method == 'GaussS'
 			U(i,:) = gauss_seidel(A,b,1000,1e-5);
 		elseif method == 'Jacobi'
 			U(i,:) = jacobi(A,b,1000,1e-5);
@@ -115,8 +126,9 @@ function [U] = BTCS(fun, f, g1, g2, T, K, r, sig, delta, q, qd, x_min, x_max, h,
 	U;
 end
 
-function [U] = Crank(fun, f, g1, g2, T, K, r, sig, delta, q, qd, x_min, x_max, h, k, m, n, X, Tau)
+function [U] = Crank(fun, f, g1, g2, T, K, r, sig, delta, q, qd, x_min, x_max, h, k, m, n, X, Tau, method)
 	fprintf('\nRunning Crank Nicolson\n');
+	fprintf('Using %s method\n', method);
 	lamda = k / h^2;
 	U = zeros(n+1, m+1);
 
@@ -141,16 +153,15 @@ function [U] = Crank(fun, f, g1, g2, T, K, r, sig, delta, q, qd, x_min, x_max, h
 		b(1) = U(i,1);
 		b(end) = U(i,end);
 
-		fprintf('Using %s method\n', method);
 		if method == 'Direct'
 			U(i,:) = (A\b)';
-		elseif method == 'Gauss-Seidel'
-			U(i,:) = (A\b)';
+		elseif method == 'GaussS'
+			U(i,:) = gauss_seidel(A,b,1000,1e-5);
 		elseif method == 'Jacobi'
-			''
+			U(i,:) = jacobi(A,b,1000,1e-5);
 		else
 			''
-		end
+		end	
 	end
 
 	U;

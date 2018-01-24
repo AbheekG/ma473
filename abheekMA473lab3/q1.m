@@ -1,4 +1,4 @@
-function q1_direct
+function q1
 	close all; clear; im_num = 1;
 	% Option Parameters
 	T = 1;
@@ -34,8 +34,8 @@ function q1_direct
 	figure; surf(S, Time, U); xlabel('S'); ylabel('t'); zlabel('u(x,t)'); title('FTCS');
 	saveas(gcf, sprintf('plots/q1_%d.png', im_num)); im_num = im_num + 1;
 	
-	Methods = ['Direct'; 'GaussS'; 'Jacobi'];%, 'SOR___'];
-	for meth = 1:3
+	Methods = ['Direct'; 'GaussS'; 'Jacobi'; 'SOR   '];
+	for meth = 1:4
 		U = BTCS(@fun, @f, @g1, @g2, T, K, r, sig, delta, q, qd, x_min, x_max, h, k, m, n, X, Tau, Methods(meth, :));
 		figure; plot(S, U(end, :)); hold on; plot(S, U(1, :)); hold off;
 		legend('Cost of option at t = 0', 'Cost of option at t = T'); xlabel('S'); ylabel('u(S, t)'); title(sprintf('BTCS using %s method', Methods(meth, :)));
@@ -44,7 +44,7 @@ function q1_direct
 		saveas(gcf, sprintf('plots/q1_%d.png', im_num)); im_num = im_num + 1;
 	end
 
-	for meth = 1:3
+	for meth = 1:4
 		U = Crank(@fun, @f, @g1, @g2, T, K, r, sig, delta, q, qd, x_min, x_max, h, k, m, n, X, Tau, Methods(meth, :));
 		figure; plot(S, U(end, :)); hold on; plot(S, U(1, :)); hold off;
 		legend('Cost of option at t = 0', 'Cost of option at t = T'); xlabel('S'); ylabel('u(S, t)'); title(sprintf('Crank-Nicolson using %s method', Methods(meth, :)));
@@ -124,7 +124,7 @@ function [U] = BTCS(fun, f, g1, g2, T, K, r, sig, delta, q, qd, x_min, x_max, h,
 		elseif method == 'Jacobi'
 			U(i,:) = jacobi(A,b,1000,1e-5);
 		else
-			''
+			U(i,:) = sor(A,b,1000,1e-5);
 		end			
 			
 	end
@@ -166,7 +166,7 @@ function [U] = Crank(fun, f, g1, g2, T, K, r, sig, delta, q, qd, x_min, x_max, h
 		elseif method == 'Jacobi'
 			U(i,:) = jacobi(A,b,1000,1e-5);
 		else
-			''
+			U(i,:) = sor(A,b,1000,1e-5);
 		end	
 	end
 

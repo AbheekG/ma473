@@ -1,4 +1,4 @@
-function q2_direct
+function q2
 	close all; clear; im_num = 1;
 	% Option Parameters
 	T = 1;

@@ -1,0 +1,23 @@
+U = FTCS(@fun, @f, @g1, @g2, T*sig^2/2, K, r, sig, delta, q, qd, x_min, x_max, h, k, m, n, X, Tau);
+	% length(X), length(U(end, :))
+	figure; plot(X, U(end, :)); xlabel('x'); ylabel('u(x, t = 0 or tau = T*sig^2/2)'); title('FTCS');
+	saveas(gcf, sprintf('plots/q2_%d.png', im_num)); im_num = im_num + 1;
+	figure; surf(X, Tau, U); xlabel('x'); ylabel('t'); zlabel('u(x,t)'); title('FTCS');
+	saveas(gcf, sprintf('plots/q2_%d.png', im_num)); im_num = im_num + 1;
+	
+	Methods = ['Direct'; 'GaussS'; 'Jacobi'];%, 'SOR___'];
+	for meth = 1:3
+		U = BTCS(@fun, @f, @g1, @g2, T, K, r, sig, delta, q, qd, x_min, x_max, h, k, m, n, X, Tau, Methods(meth, :));
+		figure; plot(X, U(end, :)); xlabel('x'); ylabel('u(x, t = 0 or tau = T*sig^2/2'); title(sprintf('BTCS using %s method', Methods(meth, :)));
+		saveas(gcf, sprintf('plots/q2_%d.png', im_num)); im_num = im_num + 1;
+		figure; surf(X, Tau, U); xlabel('x'); ylabel('tau'); zlabel('u(x,tau)'); title(sprintf('BTCS using %s method', Methods(meth, :)));
+		saveas(gcf, sprintf('plots/q2_%d.png', im_num)); im_num = im_num + 1;
+	end
+
+	for meth = 1:3
+		U = Crank(@fun, @f, @g1, @g2, T, K, r, sig, delta, q, qd, x_min, x_max, h, k, m, n, X, Tau, Methods(meth, :));
+		figure; plot(X, U(end, :)); xlabel('x'); ylabel('u(x, t = 0 or tau = T*sig^2/2'); title(sprintf('Crank-Nicolson using %s method', Methods(meth, :)));
+		saveas(gcf, sprintf('plots/q2_%d.png', im_num)); im_num = im_num + 1;
+		figure; surf(X, Tau, U); xlabel('x'); ylabel('tau'); zlabel('u(x,tau)'); title(sprintf('Crank-Nicolson using %s method', Methods(meth, :)));
+		saveas(gcf, sprintf('plots/q2_%d.png', im_num)); im_num = im_num + 1;
+	end

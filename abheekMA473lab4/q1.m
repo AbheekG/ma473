@@ -13,8 +13,8 @@ function q1
 	S_min = 0;
 	S_max = 30;
 
-	h = 0.5;
-	k = h^2/2.1;
+	h = 1;
+	k = h^2/70;
 	m = (S_max - S_min)/h;
 	n = ceil(T/k);
 
@@ -23,32 +23,31 @@ function q1
 
 	% Tau = T - t
 	U = FTCS(T, K, r, sig, delta, S, Time, h, k, isTerminal);
-	% length(X), length(U(end, :))
-	U(1, :)
-	figure; plot(S, U(1, :)); hold on; plot(S, U(1, :)); hold off;
+	% size(Time), size(S), size(U)
+	figure; plot(S, U(1, :)); hold on; plot(S, U(end, :)); hold off;
 	legend('Cost of option at t = 0', 'Cost of option at t = T'); xlabel('S'); ylabel('u(S, t)'); title('FTCS');
 	saveas(gcf, sprintf('plots/q1_%d.png', im_num)); im_num = im_num + 1;
 	figure; surf(S, Time, U); xlabel('S'); ylabel('t'); zlabel('u(x,t)'); title('FTCS');
 	saveas(gcf, sprintf('plots/q1_%d.png', im_num)); im_num = im_num + 1;
 	
-	% Methods = ['Direct'; 'GaussS'; 'Jacobi'; 'SOR   '];
-	% for meth = 1:4
-	% 	U = BTCS(@fun, @f, @g1, @g2, T, K, r, sig, delta, q, qd, x_min, x_max, h, k, m, n, X, Tau, Methods(meth, :));
-	% 	figure; plot(S, U(end, :)); hold on; plot(S, U(1, :)); hold off;
-	% 	legend('Cost of option at t = 0', 'Cost of option at t = T'); xlabel('S'); ylabel('u(S, t)'); title(sprintf('BTCS using %s method', Methods(meth, :)));
-	% 	saveas(gcf, sprintf('plots/q1_%d.png', im_num)); im_num = im_num + 1;
-	% 	figure; surf(S, Time, U); xlabel('S'); ylabel('t'); zlabel('u(S,t)'); title(sprintf('BTCS using %s method', Methods(meth, :)));
-	% 	saveas(gcf, sprintf('plots/q1_%d.png', im_num)); im_num = im_num + 1;
-	% end
+	Methods = {'Matlab Back-Slash', 'Gauss-Seidel', 'Jacobi', 'SOR'};
+	for meth = 1:4
+		U = BTCS(T, K, r, sig, delta, S, Time, h, k, isTerminal, Methods{meth});
+		figure; plot(S, U(1, :)); hold on; plot(S, U(end, :)); hold off;
+		legend('Cost of option at t = 0', 'Cost of option at t = T'); xlabel('S'); ylabel('u(S, t)'); title(sprintf('BTCS using %s method', Methods{meth}));
+		saveas(gcf, sprintf('plots/q1_%d.png', im_num)); im_num = im_num + 1;
+		figure; surf(S, Time, U); xlabel('S'); ylabel('t'); zlabel('u(S,t)'); title(sprintf('BTCS using %s method', Methods{meth}));
+		saveas(gcf, sprintf('plots/q1_%d.png', im_num)); im_num = im_num + 1;
+	end
 
-	% for meth = 1:4
-	% 	U = Crank(@fun, @f, @g1, @g2, T, K, r, sig, delta, q, qd, x_min, x_max, h, k, m, n, X, Tau, Methods(meth, :));
-	% 	figure; plot(S, U(end, :)); hold on; plot(S, U(1, :)); hold off;
-	% 	legend('Cost of option at t = 0', 'Cost of option at t = T'); xlabel('S'); ylabel('u(S, t)'); title(sprintf('Crank-Nicolson using %s method', Methods(meth, :)));
-	% 	saveas(gcf, sprintf('plots/q1_%d.png', im_num)); im_num = im_num + 1;
-	% 	figure; surf(S, Time, U); xlabel('S'); ylabel('t'); zlabel('u(S,t)'); title(sprintf('Crank-Nicolson using %s method', Methods(meth, :)));
-	% 	saveas(gcf, sprintf('plots/q1_%d.png', im_num)); im_num = im_num + 1;
-	% end
+	for meth = 1:4
+		U = Crank(T, K, r, sig, delta, S, Time, h, k, isTerminal, Methods{meth});
+		figure; plot(S, U(1, :)); hold on; plot(S, U(end, :)); hold off;
+		legend('Cost of option at t = 0', 'Cost of option at t = T'); xlabel('S'); ylabel('u(S, t)'); title(sprintf('Crank-Nicolson using %s method', Methods{meth}));
+		saveas(gcf, sprintf('plots/q1_%d.png', im_num)); im_num = im_num + 1;
+		figure; surf(S, Time, U); xlabel('S'); ylabel('t'); zlabel('u(S,t)'); title(sprintf('Crank-Nicolson using %s method', Methods{meth}));
+		saveas(gcf, sprintf('plots/q1_%d.png', im_num)); im_num = im_num + 1;
+	end
 end
 
 function [y] = f(S, K)
@@ -80,18 +79,18 @@ end
 function [U] = FTCS(T, K, r, sig, delta, S, Tau, h, k, isTerminal)
 	fprintf('\nRunning FTCS\n');
 	m = length(S);
-	n = length(Time);
+	n = length(Tau);
 	U = zeros(n, m);
 
 	if isTerminal
 		k = -k;
 	end
 
-	U(1:end, 1) = g1(r, S(1), Time, K);
-	U(1:end, end) = g2(r, S(end), Time, K);
+	U(1:end, 1) = g1(r, S(1), Tau, K);
+	U(1:end, end) = g2(r, S(end), Tau, K);
 	U(1, 1:end) = f(S, K);
 
-	for i = 2:n+1
+	for i = 2:n
 		for j = 2:m-1
 			aa = fa(sig, S(j));
 			bb = fb(r, delta, S(j));
@@ -105,44 +104,47 @@ function [U] = FTCS(T, K, r, sig, delta, S, Tau, h, k, isTerminal)
 	end
 end
 
-function [U] = BTCS(fun, f, g1, g2, T, K, r, sig, delta, q, qd, x_min, x_max, h, k, m, n, X, Tau, method)
+function [U] = BTCS(T, K, r, sig, delta, S, Tau, h, k, isTerminal, method)
 	fprintf('\nRunning BTCS\n');
 	fprintf('Using %s method\n', method);
 	m = length(S);
-	n = length(Time);
+	n = length(Tau);
 	U = zeros(n, m);
 
 	if isTerminal
 		k = -k;
-		Time = flip(Time);
 	end
 
-	U(1:end, 1) = g1(r, s, t, T);
-	U(1:end, end) = g2(r, s, t, T);
+	U(1:end, 1) = g1(r, S(1), Tau, K);
+	U(1:end, end) = g2(r, S(end), Tau, K);
 	U(1, 1:end) = f(S, K);
 
-	for i = 2:n+1
-		A = zeros(m+1, m+1);
-		b = zeros(m+1, 1);
+	for i = 2:n
+		A = zeros(m, m);
+		b = zeros(m, 1);
 
-		A(1:m+2:end) = 1 + 2*lamda;
-		A(2:m+2:end) = -lamda;
-		A(m+2:m+2:end) = -lamda;
+		aa = fa(sig, S);
+		bb = fb(r, delta, S);
+		cc = fc(r);
+
+		A(1:m+1:end) = 1 - 2*aa*k/h^2 + cc*k;
+		A(2:m+1:end) = aa(2:m)*k/h^2 - bb(2:m)*k/(2*h);
+		A(m+1:m+1:end) = aa(1:m-1)*k/h^2 + bb(1:m-1)*k/(2*h);
 
 		A(1,1) = 1;
 		A(1,2) = 0;
-		A(m+1,m+1) = 1;
-		A(m+1,m) = 0;
+		A(m,m) = 1;
+		A(m,m-1) = 0;
 
-		b(2:m) = U(i-1,2:m);
+		b(2:m-1) = U(i-1,2:m-1);
 		b(1) = U(i,1);
 		b(end) = U(i,end);
 
-		if method == 'Direct'
+		if method(1) == 'B'
 			U(i,:) = (A\b)';
-		elseif method == 'GaussS'
+		elseif method(1) == 'G'
 			U(i,:) = gauss_seidel(A,b,1000,1e-5);
-		elseif method == 'Jacobi'
+		elseif method(1) == 'J'
 			U(i,:) = jacobi(A,b,1000,1e-5);
 		else
 			U(i,:) = sor(A,b,1000,1e-5);
@@ -150,52 +152,61 @@ function [U] = BTCS(fun, f, g1, g2, T, K, r, sig, delta, q, qd, x_min, x_max, h,
 			
 	end
 
-	U;
+	if isTerminal
+		U = flipud(U);
+	end
 end
 
-function [U] = Crank(fun, f, g1, g2, T, K, r, sig, delta, q, qd, x_min, x_max, h, k, m, n, X, Tau, method)
+function [U] = Crank(T, K, r, sig, delta, S, Tau, h, k, isTerminal, method)
 	fprintf('\nRunning Crank Nicolson\n');
 	fprintf('Using %s method\n', method);
 	m = length(S);
-	n = length(Time);
+	n = length(Tau);
 	U = zeros(n, m);
 
 	if isTerminal
 		k = -k;
-		Time = flip(Time);
 	end
 
-	U(1:end, 1) = g1(r, s, t, T);
-	U(1:end, end) = g2(r, s, t, T);
+	U(1:end, 1) = g1(r, S(1), Tau, K);
+	U(1:end, end) = g2(r, S(end), Tau, K);
 	U(1, 1:end) = f(S, K);
 
-	for i = 2:n+1
-		A = zeros(m+1, m+1);
-		b = zeros(m+1, 1);
+	for i = 2:n
+		A = zeros(m, m);
+		b = zeros(m, 1);
 
-		A(1:m+2:end) = 1 + lamda;
-		A(2:m+2:end) = -lamda/2;
-		A(m+2:m+2:end) = -lamda/2;
+		aa = fa(sig, S);
+		bb = fb(r, delta, S);
+		cc = fc(r);
+
+		A(1:m+1:end) = 2 - 2*aa*k/h^2 + cc*k;
+		A(2:m+1:end) = aa(2:m)*k/h^2 - bb(2:m)*k/(2*h);
+		A(m+1:m+1:end) = aa(1:m-1)*k/h^2 + bb(1:m-1)*k/(2*h);
 
 		A(1,1) = 1;
 		A(1,2) = 0;
-		A(m+1,m+1) = 1;
-		A(m+1,m) = 0;
+		A(m,m) = 1;
+		A(m,m-1) = 0;
 
-		b(2:m) = U(i-1,1:m-1)*lamda/2 + (1-lamda)*U(i-1,2:m) + U(i-1,3:m+1)*lamda/2;
+		b(2:m-1) = (-aa(2:m-1)*k/h^2 + bb(2:m-1)*k/(2*h)) .* U(i-1,1:m-2) ...
+					+ (2 + 2*aa(2:m-1)*k/h^2 - cc*k) .* U(i-1,2:m-1) ...
+					+ (-aa(2:m-1)*k/h^2 - bb(2:m-1)*k/(2*h)) .* U(i-1,3:m);
 		b(1) = U(i,1);
 		b(end) = U(i,end);
 
-		if method == 'Direct'
+		if method(1) == 'B'
 			U(i,:) = (A\b)';
-		elseif method == 'GaussS'
+		elseif method(1) == 'G'
 			U(i,:) = gauss_seidel(A,b,1000,1e-5);
-		elseif method == 'Jacobi'
+		elseif method(1) == 'J'
 			U(i,:) = jacobi(A,b,1000,1e-5);
 		else
 			U(i,:) = sor(A,b,1000,1e-5);
 		end	
 	end
 
-	U;
+	if isTerminal
+		U = flipud(U);
+	end
 end

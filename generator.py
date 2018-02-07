@@ -1,4 +1,4 @@
-A = [18, 18];
+A = [29, 29];
 a = '''\includegraphics{"q%d_%d"}
 \pagebreak
 

@@ -11,47 +11,89 @@ function q2
 	qd = 2*(r-delta)/sig^2;
 
 	% Computational Parameters
-	x_max = 1;
+	x_max = 2;
 	x_min = -5;
 
-	h = 0.05;
-	k = h^2/2;
+	h = 0.01;
+	k = 0.01;
 	m = (x_max - x_min)/h;
 	n = ceil((T*sig^2/2)/k);
+	m_base = m;
 
 	X = x_min:h:x_max;
 	Tau = 0:k:T*sig^2/2;
 
 	S = K*exp(X);
+	indices = (3 < S) & (S < 30);
 	Time = T - 2*Tau/sig^2;
 
-	
-	U = FTCS(@fun, @f, @g1, @g2, T*sig^2/2, K, r, sig, delta, q, qd, x_min, x_max, h, k, m, n, X, Tau);
-	% length(X), length(U(end, :))
-	figure; plot(S, U(end, :)); hold on; plot(S, U(1, :)); hold off;
-	legend('Cost of option at t = 0', 'Cost of option at t = T'); xlabel('S'); ylabel('u(S, t)'); title('FTCS');
+	U = BTCS(@fun, @f, @g1, @g2, T, K, r, sig, delta, q, qd, x_min, x_max, h, k, m, n, X, Tau);
+	figure; plot(S(indices), U(end, indices)); hold on; ttemp = g(X, Time(1), q, qd); plot(S(indices), ttemp(indices)); hold off;
+	legend('Cost of option at t = 0', 'max(S-K, 0) at t = 0'); xlabel('S'); ylabel('u(S, t)'); title(sprintf('BTCS using PSOR method'));
 	saveas(gcf, sprintf('plots/q2_%d.png', im_num)); im_num = im_num + 1;
-	figure; surf(S, Time, U); xlabel('S'); ylabel('t'); zlabel('u(S,t)'); title('FTCS');
+	figure; surf(S(indices), Time, U(:, indices)); xlabel('S'); ylabel('t'); zlabel('u(S,t)'); title(sprintf('BTCS using PSOR method'));
 	saveas(gcf, sprintf('plots/q2_%d.png', im_num)); im_num = im_num + 1;
-	
-	Methods = ['Direct'; 'GaussS'; 'Jacobi'; 'SOR   '];
-	for meth = 1:4
-		U = BTCS(@fun, @f, @g1, @g2, T, K, r, sig, delta, q, qd, x_min, x_max, h, k, m, n, X, Tau, Methods(meth, :));
-		figure; plot(S, U(end, :)); hold on; plot(S, U(1, :)); hold off;
-		legend('Cost of option at t = 0', 'Cost of option at t = T'); xlabel('S'); ylabel('u(S, t)'); title(sprintf('BTCS using %s method', Methods(meth, :)));
-		saveas(gcf, sprintf('plots/q2_%d.png', im_num)); im_num = im_num + 1;
-		figure; surf(S, Time, U); xlabel('S'); ylabel('t'); zlabel('u(S,t)'); title(sprintf('BTCS using %s method', Methods(meth, :)));
-		saveas(gcf, sprintf('plots/q2_%d.png', im_num)); im_num = im_num + 1;
+	U1_real = U(end, :);
+
+	U = Crank(@fun, @f, @g1, @g2, T, K, r, sig, delta, q, qd, x_min, x_max, h, k, m, n, X, Tau);
+	figure; plot(S(indices), U(end, indices)); hold on; ttemp = g(X, Time(1), q, qd); plot(S(indices), ttemp(indices)); hold off;
+	legend('Cost of option at t = 0', 'Cost of option at t = T'); xlabel('S'); ylabel('u(S, t)'); title(sprintf('Crank-Nicolson using PSOR method'));
+	saveas(gcf, sprintf('plots/q2_%d.png', im_num)); im_num = im_num + 1;
+	figure; surf(S(indices), Time, U(:, indices)); xlabel('S'); ylabel('t'); zlabel('u(S,t)'); title(sprintf('Crank-Nicolson using PSOR method'));
+	saveas(gcf, sprintf('plots/q2_%d.png', im_num)); im_num = im_num + 1;
+	U2_real = U(end, :);
+	Is = [1, 2, 5, 10, 12.5, 25];
+	N1 = []; E1 = []; E2 = [];
+
+	for iiii = 1:6
+		h = 0.5/Is(iiii);
+		k = 0.5/Is(iiii);
+		m = (x_max - x_min)/h;
+		n = floor((T*sig^2/2)/k);
+
+		N1 = [N1, m];
+
+		X = x_min:h:x_max;
+		Tau = 0:k:T*sig^2/2;
+
+		S = K*exp(X);
+		Time = T - 2*Tau/sig^2;
+
+		U = BTCS(@fun, @f, @g1, @g2, T, K, r, sig, delta, q, qd, x_min, x_max, h, k, m, n, X, Tau);
+		U1_bad = U(end, :);
+		E1 = [E1, max(abs(U1_bad - U1_real(1:(m_base/m):end)))];
+
+		U = Crank(@fun, @f, @g1, @g2, T, K, r, sig, delta, q, qd, x_min, x_max, h, k, m, n, X, Tau);
+		U2_bad = U(end, :);
+		E2 = [E2, max(abs(U2_bad - U2_real(1:(m_base/m):end)))];
 	end
 
-	for meth = 1:4
-		U = Crank(@fun, @f, @g1, @g2, T, K, r, sig, delta, q, qd, x_min, x_max, h, k, m, n, X, Tau, Methods(meth, :));
-		figure; plot(S, U(end, :)); hold on; plot(S, U(1, :)); hold off;
-		legend('Cost of option at t = 0', 'Cost of option at t = T'); xlabel('S'); ylabel('u(S, t)'); title(sprintf('Crank-Nicolson using %s method', Methods(meth, :)));
-		saveas(gcf, sprintf('plots/q2_%d.png', im_num)); im_num = im_num + 1;
-		figure; surf(S, Time, U); xlabel('S'); ylabel('t'); zlabel('u(S,t)'); title(sprintf('Crank-Nicolson using %s method', Methods(meth, :)));
-		saveas(gcf, sprintf('plots/q2_%d.png', im_num)); im_num = im_num + 1;
-	end
+	figure; plot(S, abs(U1_bad - U1_real(1:(m_base/m):end))); 
+	legend('Error in U for (dx and dTau), and (dx/2 and dTau/2) at t = 0'); xlabel('S'); ylabel('Error');
+	title(sprintf('BTCS Error in U for (δx and δτ), and (δx/2 and δτ/2) at t = 0'));
+	saveas(gcf, sprintf('plots/q2_%d.png', im_num)); im_num = im_num + 1;
+
+	figure; plot(N1, E1); xlabel('N'); ylabel('Error');
+	title(sprintf('BTCS. Max absolute Error vs N'));
+	saveas(gcf, sprintf('plots/q2_%d.png', im_num)); im_num = im_num + 1;
+
+	figure; plot(S, abs(U2_bad - U2_real(1:(m_base/m):end))); 
+	legend('Error in U for (dx and dTau), and (dx/2 and dTau/2) at t = 0'); xlabel('S'); ylabel('Error');
+	title(sprintf('Crank-Nicolson Error in U for (δx and δτ), and (δx/2 and δτ/2) at t = 0'));
+	saveas(gcf, sprintf('plots/q2_%d.png', im_num)); im_num = im_num + 1;
+
+	figure; plot(N1, E2); xlabel('N'); ylabel('Error');
+	title(sprintf('Crank-Nicolson. Max absolute Error vs N'));
+	saveas(gcf, sprintf('plots/q2_%d.png', im_num)); im_num = im_num + 1;
+
+
+end
+
+function [y] = g(x, t, q, qd)
+	temp1 = zeros(size(x));
+	temp2 = exp(x*(qd - 1)/2 ) - exp(x*(qd + 1)/2);
+
+	y = exp(t*( (qd-1)^2 + 4*q )/4 ) .* max([temp1; temp2]);
 end
 
 function [y] = fun(x, t)
@@ -72,27 +114,9 @@ function [y] = g2(x, t, qd)
 	y = 0;
 end
 
-function [U] = FTCS(fun, f, g1, g2, T, K, r, sig, delta, q, qd, x_min, x_max, h, k, m, n, X, Tau)
-	fprintf('\nRunning FTCS\n');
-	lamda = k / h^2;
-	U = zeros(n+1, m+1);
-
-	U(1:end, 1) = g1(x_min, Tau, qd);
-	U(1:end, end) = g2(x_max, Tau, qd);
-	U(1, 1:end) = f(X, qd);
-
-	for i = 2:n+1
-		for j = 2:m
-			U(i, j) = lamda*U(i-1,j-1) + (1-2*lamda)*U(i-1,j) + lamda*U(i-1,j+1);
-		end
-	end
-
-	U;
-end
-
-function [U] = BTCS(fun, f, g1, g2, T, K, r, sig, delta, q, qd, x_min, x_max, h, k, m, n, X, Tau, method)
+function [U] = BTCS(fun, f, g1, g2, T, K, r, sig, delta, q, qd, x_min, x_max, h, k, m, n, X, Tau)
 	fprintf('\nRunning BTCS\n');
-	fprintf('Using %s method\n', method);
+	fprintf('Using PSOR method\n');
 	lamda = k / h^2;
 	U = zeros(n+1, m+1);
 
@@ -117,24 +141,16 @@ function [U] = BTCS(fun, f, g1, g2, T, K, r, sig, delta, q, qd, x_min, x_max, h,
 		b(1) = U(i,1);
 		b(end) = U(i,end);
 
-		if method == 'Direct'
-			U(i,:) = (A\b)';
-		elseif method == 'GaussS'
-			U(i,:) = gauss_seidel(A,b,1000,1e-5);
-		elseif method == 'Jacobi'
-			U(i,:) = jacobi(A,b,1000,1e-5);
-		else
-			U(i,:) = sor(A,b,1000,1e-5);
-		end			
-			
+		GG = g(X, Tau(i), q, qd);
+		U(i,:) = psor(A,b - A*GG',1000,1e-5)' + GG;
 	end
 
 	U;
 end
 
-function [U] = Crank(fun, f, g1, g2, T, K, r, sig, delta, q, qd, x_min, x_max, h, k, m, n, X, Tau, method)
+function [U] = Crank(fun, f, g1, g2, T, K, r, sig, delta, q, qd, x_min, x_max, h, k, m, n, X, Tau)
 	fprintf('\nRunning Crank Nicolson\n');
-	fprintf('Using %s method\n', method);
+	fprintf('Using PSOR method\n');
 	lamda = k / h^2;
 	U = zeros(n+1, m+1);
 
@@ -159,15 +175,8 @@ function [U] = Crank(fun, f, g1, g2, T, K, r, sig, delta, q, qd, x_min, x_max, h
 		b(1) = U(i,1);
 		b(end) = U(i,end);
 
-		if method == 'Direct'
-			U(i,:) = (A\b)';
-		elseif method == 'GaussS'
-			U(i,:) = gauss_seidel(A,b,1000,1e-5);
-		elseif method == 'Jacobi'
-			U(i,:) = jacobi(A,b,1000,1e-5);
-		else
-			U(i,:) = sor(A,b,1000,1e-5);
-		end	
+		GG = g(X, Tau(i), q, qd);
+		U(i,:) = psor(A,b - A*GG',1000,1e-5)' + GG;
 	end
 
 	U;

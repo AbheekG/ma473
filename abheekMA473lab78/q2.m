@@ -24,20 +24,20 @@ function q2
 	Tau = 0:k:T*sig^2/2;
 
 	S = K*exp(X);
-	indices = (3 < S) & (S < 30);
+	indices = (1 < S) & (S < 30);
 	Time = T - 2*Tau/sig^2;
 
 	U = BTCS(@fun, @f, @g1, @g2, T, K, r, sig, delta, q, qd, x_min, x_max, h, k, m, n, X, Tau);
-	figure; plot(S(indices), U(end, indices)); hold on; ttemp = g(X, Time(1), q, qd); plot(S(indices), ttemp(indices)); hold off;
-	legend('Cost of option at t = 0', 'max(S-K, 0) at t = 0'); xlabel('S'); ylabel('u(S, t)'); title(sprintf('BTCS using PSOR method'));
+	figure; plot(S(indices), U(end, indices)); hold on; ttemp = transform(g(X, Time(end), q, qd), X, Time(end), q, qd, K); plot(S(indices), ttemp(indices)); hold off;
+	legend('Price of option at t = 0', 'max(S-K, 0) at t = 0'); xlabel('S'); ylabel('u(S, t)'); title(sprintf('BTCS using PSOR method'));
 	saveas(gcf, sprintf('plots/q2_%d.png', im_num)); im_num = im_num + 1;
 	figure; surf(S(indices), Time, U(:, indices)); xlabel('S'); ylabel('t'); zlabel('u(S,t)'); title(sprintf('BTCS using PSOR method'));
 	saveas(gcf, sprintf('plots/q2_%d.png', im_num)); im_num = im_num + 1;
 	U1_real = U(end, :);
 
 	U = Crank(@fun, @f, @g1, @g2, T, K, r, sig, delta, q, qd, x_min, x_max, h, k, m, n, X, Tau);
-	figure; plot(S(indices), U(end, indices)); hold on; ttemp = g(X, Time(1), q, qd); plot(S(indices), ttemp(indices)); hold off;
-	legend('Cost of option at t = 0', 'Cost of option at t = T'); xlabel('S'); ylabel('u(S, t)'); title(sprintf('Crank-Nicolson using PSOR method'));
+	figure; plot(S(indices), U(end, indices)); hold on; ttemp = transform(g(X, Time(end), q, qd), X, Time(end), q, qd, K); plot(S(indices), ttemp(indices)); hold off;
+	legend('Price of option at t = 0', 'max(S-K, 0) at t = 0'); xlabel('S'); ylabel('u(S, t)'); title(sprintf('Crank-Nicolson using PSOR method'));
 	saveas(gcf, sprintf('plots/q2_%d.png', im_num)); im_num = im_num + 1;
 	figure; surf(S(indices), Time, U(:, indices)); xlabel('S'); ylabel('t'); zlabel('u(S,t)'); title(sprintf('Crank-Nicolson using PSOR method'));
 	saveas(gcf, sprintf('plots/q2_%d.png', im_num)); im_num = im_num + 1;
@@ -85,8 +85,6 @@ function q2
 	figure; plot(N1, E2); xlabel('N'); ylabel('Error');
 	title(sprintf('Crank-Nicolson. Max absolute Error vs N'));
 	saveas(gcf, sprintf('plots/q2_%d.png', im_num)); im_num = im_num + 1;
-
-
 end
 
 function [y] = g(x, t, q, qd)
@@ -112,6 +110,21 @@ end
 
 function [y] = g2(x, t, qd)
 	y = 0;
+end
+
+function [y] = transform(U, X, Tau, q, qd, K)
+	y = zeros(size(U));
+	if length(Tau) == 1
+		for j = 1:length(X)
+			y(j) = U(j) * K * exp(-0.5* (qd-1)*X(j) - (0.25*(qd-1)^2 + q)*Tau);
+		end
+	else
+		for i = 1:length(Tau)
+			for j = 1:length(X)
+				y(i, j) = U(i, j) * K * exp(-0.5* (qd-1)*X(j) - (0.25*(qd-1)^2 + q)*Tau(i));
+			end
+		end
+	end
 end
 
 function [U] = BTCS(fun, f, g1, g2, T, K, r, sig, delta, q, qd, x_min, x_max, h, k, m, n, X, Tau)
@@ -145,7 +158,7 @@ function [U] = BTCS(fun, f, g1, g2, T, K, r, sig, delta, q, qd, x_min, x_max, h,
 		U(i,:) = psor(A,b - A*GG',1000,1e-5)' + GG;
 	end
 
-	U;
+	U = transform(U, X, Tau, q, qd, K);
 end
 
 function [U] = Crank(fun, f, g1, g2, T, K, r, sig, delta, q, qd, x_min, x_max, h, k, m, n, X, Tau)
@@ -179,5 +192,5 @@ function [U] = Crank(fun, f, g1, g2, T, K, r, sig, delta, q, qd, x_min, x_max, h
 		U(i,:) = psor(A,b - A*GG',1000,1e-5)' + GG;
 	end
 
-	U;
+	U = transform(U, X, Tau, q, qd, K);
 end

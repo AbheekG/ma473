@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2017.11.13)  14 MAR 2018 17:17
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2018.2.1)  14 MAR 2018 23:38
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -988,128 +988,128 @@ Package microtype Info: Loading generic settings for font family
 (microtype)             For optimal results, create family-specific settings.
 (microtype)             See the microtype manual for details.
 
-<plots/"q1_1".png, id=12, 429.2838pt x 338.7054pt>
+<plots/"q1_1".png, id=12, 421.575pt x 316.0608pt>
 File: plots/"q1_1".png Graphic file (type png)
  <use plots/"q1_1".png>
-Package pdftex.def Info: plots/"q1_1".png used on input line 21.
-(pdftex.def)             Requested size: 429.28275pt x 338.70457pt.
+Package pdftex.def Info: plots/"q1_1".png used on input line 22.
+(pdftex.def)             Requested size: 421.57396pt x 316.06003pt.
 
 [1
 
 {/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map} <./plots/q1_1.png (PNG copy
-)>] <plots/"q1_2".png, id=24, 429.2838pt x 338.7054pt>
+)>] <plots/"q1_2".png, id=24, 421.575pt x 316.0608pt>
 File: plots/"q1_2".png Graphic file (type png)
+ <use plots/"q1_2".png>
+Package pdftex.def Info: plots/"q1_2".png used on input line 26.
+(pdftex.def)             Requested size: 421.57396pt x 316.06003pt.
 
-<use plots/"q1_2".png>
-Package pdftex.def Info: plots/"q1_2".png used on input line 25.
-(pdftex.def)             Requested size: 429.28275pt x 338.70457pt.
- [2 <./plots/q1_2.png (PNG copy)>]
-<plots/"q1_3".png, id=29, 429.2838pt x 338.7054pt>
+[2 <./plots/q1_2.png (PNG copy)>]
+<plots/"q1_3".png, id=29, 421.575pt x 316.0608pt>
 File: plots/"q1_3".png Graphic file (type png)
  <use plots/"q1_3".png>
-Package pdftex.def Info: plots/"q1_3".png used on input line 29.
-(pdftex.def)             Requested size: 429.28275pt x 338.70457pt.
+Package pdftex.def Info: plots/"q1_3".png used on input line 30.
+(pdftex.def)             Requested size: 421.57396pt x 316.06003pt.
 
 [3 <./plots/q1_3.png (PNG copy)>]
 <plots/"q1_4".png, id=34, 429.2838pt x 338.7054pt>
 File: plots/"q1_4".png Graphic file (type png)
  <use plots/"q1_4".png>
-Package pdftex.def Info: plots/"q1_4".png used on input line 33.
+Package pdftex.def Info: plots/"q1_4".png used on input line 34.
 (pdftex.def)             Requested size: 429.28275pt x 338.70457pt.
 
 [4 <./plots/q1_4.png (PNG copy)>]
-<plots/"q1_5".png, id=39, 429.2838pt x 338.7054pt>
+<plots/"q1_5".png, id=39, 421.575pt x 316.0608pt>
 File: plots/"q1_5".png Graphic file (type png)
  <use plots/"q1_5".png>
-Package pdftex.def Info: plots/"q1_5".png used on input line 37.
-(pdftex.def)             Requested size: 429.28275pt x 338.70457pt.
+Package pdftex.def Info: plots/"q1_5".png used on input line 38.
+(pdftex.def)             Requested size: 421.57396pt x 316.06003pt.
 
 [5 <./plots/q1_5.png (PNG copy)>]
-<plots/"q1_6".png, id=44, 429.2838pt x 338.7054pt>
+<plots/"q1_6".png, id=44, 421.575pt x 316.0608pt>
 File: plots/"q1_6".png Graphic file (type png)
  <use plots/"q1_6".png>
-Package pdftex.def Info: plots/"q1_6".png used on input line 41.
-(pdftex.def)             Requested size: 429.28275pt x 338.70457pt.
+Package pdftex.def Info: plots/"q1_6".png used on input line 42.
+(pdftex.def)             Requested size: 421.57396pt x 316.06003pt.
 
 [6 <./plots/q1_6.png (PNG copy)>]
 <plots/"q1_7".png, id=49, 421.575pt x 316.0608pt>
 File: plots/"q1_7".png Graphic file (type png)
  <use plots/"q1_7".png>
-Package pdftex.def Info: plots/"q1_7".png used on input line 45.
+Package pdftex.def Info: plots/"q1_7".png used on input line 46.
 (pdftex.def)             Requested size: 421.57396pt x 316.06003pt.
 
 [7 <./plots/q1_7.png (PNG copy)>]
-<plots/"q1_8".png, id=55, 429.2838pt x 338.7054pt>
+<plots/"q1_8".png, id=55, 421.575pt x 316.0608pt>
 File: plots/"q1_8".png Graphic file (type png)
  <use plots/"q1_8".png>
-Package pdftex.def Info: plots/"q1_8".png used on input line 49.
-(pdftex.def)             Requested size: 429.28275pt x 338.70457pt.
-
-[8 <./plots/q1_8.png (PNG copy)>]
-<plots/"q2_1".png, id=60, 429.2838pt x 338.7054pt>
-File: plots/"q2_1".png Graphic file (type png)
- <use plots/"q2_1".png>
-Package pdftex.def Info: plots/"q2_1".png used on input line 54.
-(pdftex.def)             Requested size: 429.28275pt x 338.70457pt.
-
-[9 <./plots/q2_1.png (PNG copy)>]
-<plots/"q2_2".png, id=65, 429.2838pt x 338.7054pt>
-File: plots/"q2_2".png Graphic file (type png)
- <use plots/"q2_2".png>
-Package pdftex.def Info: plots/"q2_2".png used on input line 58.
-(pdftex.def)             Requested size: 429.28275pt x 338.70457pt.
-
-[10 <./plots/q2_2.png (PNG copy)>]
-<plots/"q2_3".png, id=70, 429.2838pt x 338.7054pt>
-File: plots/"q2_3".png Graphic file (type png)
- <use plots/"q2_3".png>
-Package pdftex.def Info: plots/"q2_3".png used on input line 62.
-(pdftex.def)             Requested size: 429.28275pt x 338.70457pt.
-
-[11 <./plots/q2_3.png (PNG copy)>]
-<plots/"q2_4".png, id=75, 429.2838pt x 338.7054pt>
-File: plots/"q2_4".png Graphic file (type png)
- <use plots/"q2_4".png>
-Package pdftex.def Info: plots/"q2_4".png used on input line 66.
-(pdftex.def)             Requested size: 429.28275pt x 338.70457pt.
-
-[12 <./plots/q2_4.png (PNG copy)>]
-<plots/"q2_5".png, id=80, 429.2838pt x 338.7054pt>
-File: plots/"q2_5".png Graphic file (type png)
- <use plots/"q2_5".png>
-Package pdftex.def Info: plots/"q2_5".png used on input line 70.
-(pdftex.def)             Requested size: 429.28275pt x 338.70457pt.
-
-[13 <./plots/q2_5.png (PNG copy)>]
-<plots/"q2_6".png, id=86, 429.2838pt x 338.7054pt>
-File: plots/"q2_6".png Graphic file (type png)
- <use plots/"q2_6".png>
-Package pdftex.def Info: plots/"q2_6".png used on input line 74.
-(pdftex.def)             Requested size: 429.28275pt x 338.70457pt.
-
-[14 <./plots/q2_6.png (PNG copy)>]
-<plots/"q2_7".png, id=91, 429.2838pt x 338.7054pt>
-File: plots/"q2_7".png Graphic file (type png)
- <use plots/"q2_7".png>
-Package pdftex.def Info: plots/"q2_7".png used on input line 78.
-(pdftex.def)             Requested size: 429.28275pt x 338.70457pt.
-
-[15 <./plots/q2_7.png (PNG copy)>]
-<plots/"q2_8".png, id=96, 421.575pt x 316.0608pt>
-File: plots/"q2_8".png Graphic file (type png)
- <use plots/"q2_8".png>
-Package pdftex.def Info: plots/"q2_8".png used on input line 82.
+Package pdftex.def Info: plots/"q1_8".png used on input line 50.
 (pdftex.def)             Requested size: 421.57396pt x 316.06003pt.
 
+[8 <./plots/q1_8.png (PNG copy)>]
+<plots/"q2_1".png, id=60, 421.575pt x 316.0608pt>
+File: plots/"q2_1".png Graphic file (type png)
+ <use plots/"q2_1".png>
+Package pdftex.def Info: plots/"q2_1".png used on input line 56.
+(pdftex.def)             Requested size: 421.57396pt x 316.06003pt.
+
+[9 <./plots/q2_1.png (PNG copy)>]
+<plots/"q2_2".png, id=65, 421.575pt x 316.0608pt>
+File: plots/"q2_2".png Graphic file (type png)
+ <use plots/"q2_2".png>
+Package pdftex.def Info: plots/"q2_2".png used on input line 60.
+(pdftex.def)             Requested size: 421.57396pt x 316.06003pt.
+
+[10 <./plots/q2_2.png (PNG copy)>]
+<plots/"q2_3".png, id=70, 421.575pt x 316.0608pt>
+File: plots/"q2_3".png Graphic file (type png)
+ <use plots/"q2_3".png>
+Package pdftex.def Info: plots/"q2_3".png used on input line 64.
+(pdftex.def)             Requested size: 421.57396pt x 316.06003pt.
+
+[11 <./plots/q2_3.png (PNG copy)>]
+<plots/"q2_4".png, id=75, 421.575pt x 316.0608pt>
+File: plots/"q2_4".png Graphic file (type png)
+ <use plots/"q2_4".png>
+Package pdftex.def Info: plots/"q2_4".png used on input line 68.
+(pdftex.def)             Requested size: 421.57396pt x 316.06003pt.
+
+[12 <./plots/q2_4.png (PNG copy)>]
+<plots/"q2_5".png, id=80, 421.575pt x 316.0608pt>
+File: plots/"q2_5".png Graphic file (type png)
+ <use plots/"q2_5".png>
+Package pdftex.def Info: plots/"q2_5".png used on input line 72.
+(pdftex.def)             Requested size: 421.57396pt x 316.06003pt.
+
+[13 <./plots/q2_5.png (PNG copy)>]
+<plots/"q2_6".png, id=86, 421.575pt x 316.0608pt>
+File: plots/"q2_6".png Graphic file (type png)
+ <use plots/"q2_6".png>
+Package pdftex.def Info: plots/"q2_6".png used on input line 76.
+(pdftex.def)             Requested size: 421.57396pt x 316.06003pt.
+
+[14 <./plots/q2_6.png (PNG copy)>]
+<plots/"q2_7".png, id=91, 421.575pt x 316.0608pt>
+File: plots/"q2_7".png Graphic file (type png)
+ <use plots/"q2_7".png>
+Package pdftex.def Info: plots/"q2_7".png used on input line 80.
+(pdftex.def)             Requested size: 421.57396pt x 316.06003pt.
+
+[15 <./plots/q2_7.png (PNG copy)>]
+<plots/"q2_8".png, id=96, 429.2838pt x 338.7054pt>
+File: plots/"q2_8".png Graphic file (type png)
+ <use plots/"q2_8".png>
+Package pdftex.def Info: plots/"q2_8".png used on input line 84.
+(pdftex.def)             Requested size: 429.28275pt x 338.70457pt.
+
 [16 <./plots/q2_8.png (PNG copy)>]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 85.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 85.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 87.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 87.
  (./report.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 85.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 85.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 87.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 87.
 Package rerunfilecheck Info: File `report.out' has not changed.
 (rerunfilecheck)             Checksum: E46157D6D8F4C606678CCE0D6479EABB;92.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 85.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 87.
  )
 (\end occurred inside a group at level 1)
 
@@ -1117,8 +1117,8 @@ Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 85.
 ### bottom level 
 Here is how much of TeX's memory you used:
  12669 strings out of 493029
- 188190 string characters out of 6136233
- 349354 words of memory out of 5000000
+ 188190 string characters out of 6136235
+ 349353 words of memory out of 5000000
  15942 multiletter control sequences out of 15000+600000
  51772 words of font info for 131 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
@@ -1130,7 +1130,7 @@ f-dist/fonts/type1/public/kpfonts/jkpmn8a.pfb></usr/share/texlive/texmf-dist/fo
 nts/type1/public/kpfonts/jkpssbn8a.pfb></usr/share/texlive/texmf-dist/fonts/typ
 e1/public/kpfonts/jkpssmn8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/publ
 ic/kpfonts/jkpsy.pfb>
-Output written on report.pdf (16 pages, 748639 bytes).
+Output written on report.pdf (16 pages, 797295 bytes).
 PDF statistics:
  130 PDF objects out of 1000 (max. 8388607)
  89 compressed objects within 1 object stream
